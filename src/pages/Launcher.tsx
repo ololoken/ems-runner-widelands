@@ -39,6 +39,7 @@ export default () => {
 
   const [instance, setInstance] = useState<Module>();
   const [initialized, setInitialized] = useState(false);
+  const [readyToRun, setReadyToRun] = useState(false);
   const [mainRunning, setMainRunning] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [hasData, setHasData] = useState(false);
@@ -107,6 +108,7 @@ export default () => {
           instance.print(`Mounted [${instance.ENV.HOME}]`);
           resolve(Object.keys(instance.FS.lookupPath(`${instance.ENV.HOME}`).node.contents).length > 0);
         })).then(setHasData)
+        //instance.FS.writeFile('/widelands/data/datadirversion', '1.3~git27030 (655768d@fs-sync)\n\n', { encoding: "utf8" });
       } catch (ignore) {
         instance.print('No local data found...')
       } finally {
@@ -122,6 +124,7 @@ export default () => {
     instance.FS.syncfs(false, err => {
       if (err) return instance.print('Failed to sync FS');
       instance.print('File system synced.')
+      setReadyToRun(true);
     })
   }, [hasData, instance]);
 
@@ -145,6 +148,13 @@ export default () => {
     setOpenDeleteConfirmation(true);
   }
 
+  useEffect(() => {
+    if (!initialized || !instance) return
+    instance.callMain([`--datadir=${instance.ENV.HOME}/data`]);
+    setMainRunning(true);
+    setShowConsole(false);
+  }, [readyToRun, instance]);
+
   const runInstance = async () => {
     if (!instance) return;
     setInitialized(false);
@@ -153,9 +163,6 @@ export default () => {
           instance.print(`Fetching data.`);
           await zipHttpReader(instance, gameData).then(setHasData);
       }
-      instance.callMain([`--datadir=${instance.ENV.HOME}/data`]);
-      setMainRunning(true);
-      setShowConsole(false);
     } catch (e) {
       console.error(e);
     }
