@@ -35,5 +35,9 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.41.0",
     "@rollup/rollup-linux-x64-musl": "4.41.0"
+  },
+  "dependencies": {
+    "@types/ws": "^8.18.1",
+    "ws": "^8.18.2"
   }
 }

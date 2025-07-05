@@ -10,7 +10,7 @@ export default defineConfig({
     filter: id => id.endsWith('widelands.js')
   })],
   envPrefix: 'WL',
-  base: process.env.VITE_BASE ?? '/',
+  base: process.env.SITE_BASE ?? '/',
   clearScreen: false,
   server: {
     headers: {

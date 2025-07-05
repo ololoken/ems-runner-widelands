@@ -3,7 +3,7 @@ export type ModuleInitParams = {
   reportDownloadProgress: (percent: number) => void
   canvas: HTMLCanvasElement
   ENV: { [key: string]: string | number }
-}
+} & Record<string, any>
 
 export type Module = {
   mainScriptUrlOrBlob: string | Blob
@@ -34,7 +34,7 @@ export type Module = {
   noInitialRun: boolean
   run: () => void
   callMain: (args?: any[]) => void
-}
+} & Record<string, any>
 
 export type FSNode = {
   node_ops: {}

@@ -6,7 +6,7 @@ import wasm from '../assets/widelands/widelands.wasm?url'
 
 import widelands from '../assets/widelands/widelands';
 
-export const ModuleInstance = ({ ENV, reportDownloadProgress, pushMessage, canvas }: ModuleInitParams) => {
+export const ModuleInstance = ({ ENV, reportDownloadProgress, pushMessage, canvas, ...rest }: ModuleInitParams) => {
 
   let module: Partial<Module>;
 
@@ -18,7 +18,6 @@ export const ModuleInstance = ({ ENV, reportDownloadProgress, pushMessage, canva
     preInit: [() => { Object.assign(module?.ENV ?? {}, ENV) }],
     preRun: [],
     noInitialRun: true,
-
     onExit: code => console.log('exit code: '+code),
     locateFile: (path: string) => {
       if (path.endsWith('wasm')) return wasm;
@@ -34,6 +33,7 @@ export const ModuleInstance = ({ ENV, reportDownloadProgress, pushMessage, canva
         const { groups: { progress, total } } = [...status.matchAll(dlProgressRE)][0] as unknown as { groups: { progress: number, total: number } };
         reportDownloadProgress?.(Math.round(progress / total * 100));
       }
-    }
+    },
+    ...rest
   });
 }

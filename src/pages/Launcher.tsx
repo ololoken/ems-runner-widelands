@@ -86,6 +86,9 @@ export default () => {
         XDG_CONFIG_HOME: '/widelands',
         XDG_DATA_HOME: '/widelands'
       },
+      websocket: {
+        url: 'ws://localhost:4990/'
+      },
       canvas: canvas.current,
       pushMessage,
       reportDownloadProgress,
@@ -108,7 +111,7 @@ export default () => {
           instance.print(`Mounted [${instance.ENV.HOME}]`);
           resolve(Object.keys(instance.FS.lookupPath(`${instance.ENV.HOME}`).node.contents).length > 0);
         })).then(setHasData)
-        //instance.FS.writeFile('/widelands/data/datadirversion', '1.3~git27030 (655768d@fs-sync)\n\n', { encoding: "utf8" });
+        instance.FS.writeFile('/widelands/data/datadirversion', '1.3~git27070 (7dbccfe@master)\n\n', { encoding: "utf8" });
       } catch (ignore) {
         instance.print('No local data found...')
       } finally {
